@@ -32,8 +32,6 @@ module FactoryBot
     end
 
     def run(build_strategy, overrides, &block)
-      block ||= ->(result) { result }
-
       compile
 
       strategy = Strategy.lookup_strategy(build_strategy).new
@@ -45,7 +43,8 @@ module FactoryBot
       evaluation = Evaluation.new(evaluator, attribute_assigner, compiled_to_create, observer)
 
       evaluation.notify(:before_all, nil)
-      instance = strategy.result(evaluation).tap(&block)
+      instance = strategy.result(evaluation)
+      yield instance if block
       evaluation.notify(:after_all, instance)
 
       instance

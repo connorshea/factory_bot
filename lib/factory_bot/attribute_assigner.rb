@@ -108,6 +108,8 @@ module FactoryBot
 
     # Builds a list of attribute names which are slated to be interrupted by an override.
     def attribute_names_overriden_by_alias
+      return [] if override_names.empty?
+
       @attribute_list
         .non_ignored
         .flat_map { |attribute|

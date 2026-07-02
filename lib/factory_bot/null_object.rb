@@ -2,7 +2,7 @@ module FactoryBot
   # @api private
   class NullObject < ::BasicObject
     def initialize(methods_to_respond_to)
-      @methods_to_respond_to = methods_to_respond_to.map(&:to_s)
+      @methods_to_respond_to = ::Set.new(methods_to_respond_to) { |method| method.to_sym }
     end
 
     def method_missing(name, *args, &block) # rubocop:disable Style/MissingRespondToMissing
@@ -14,7 +14,7 @@ module FactoryBot
     end
 
     def respond_to?(method)
-      @methods_to_respond_to.include? method.to_s
+      @methods_to_respond_to.include? method.to_sym
     end
   end
 end

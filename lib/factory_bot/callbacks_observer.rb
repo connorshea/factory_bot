@@ -36,7 +36,7 @@ module FactoryBot
     end
 
     def completion_key_for(instance, callback)
-      "#{instance.object_id}-#{callback.object_id}"
+      [instance.object_id, callback.object_id]
     end
   end
 end

@@ -128,7 +128,7 @@ module FactoryBot
     #   (1) attributes which are aliases and reference the same value
     #   (2) a logical grouping of a foreign key and an associated object
     def ignorable_alias?(attribute, override)
-      return false unless attribute.alias_for?(override)
+      return false unless alias_names_for_override(override).include?(attribute.name)
 
       # The attribute alias should be ignored when the override interrupts an association
       return true if override_interrupts_association?(attribute, override)
@@ -165,6 +165,13 @@ module FactoryBot
     # @param [Symbol] override the name of an override
     def override_matches_declared_attribute?(override)
       attribute_names.include?(override)
+    end
+
+    # Names that the given override is an alias for, computed once per
+    # override rather than once per attribute/override pair.
+    def alias_names_for_override(override)
+      @alias_names_for_override ||= {}
+      @alias_names_for_override[override] ||= FactoryBot.aliases_for(override)
     end
   end
 end

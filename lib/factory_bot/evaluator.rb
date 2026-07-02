@@ -16,6 +16,8 @@ module FactoryBot
       @instance = nil
 
       @overrides.each do |name, value|
+        next if self.class.declared_attribute_names.include?(name)
+
         singleton_class.define_attribute(name) { value }
       end
     end
@@ -67,6 +69,13 @@ module FactoryBot
           list.apply_attributes attribute_list.to_a
         end
       end
+    end
+
+    # Names of the attributes defined on this evaluator class via
+    # .define_attribute. Overrides for these attributes are served straight
+    # from @cached_attributes, so no per-instance reader needs to be defined.
+    def self.declared_attribute_names
+      @declared_attribute_names ||= Set.new(attribute_lists ? attribute_list.names : nil)
     end
 
     def self.define_attribute(name, &block)

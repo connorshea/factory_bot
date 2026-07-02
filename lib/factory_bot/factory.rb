@@ -99,7 +99,8 @@ module FactoryBot
     end
 
     def with_traits(traits)
-      clone.tap do |factory_with_traits|
+      @with_traits_cache ||= {}
+      @with_traits_cache[traits.dup] ||= clone.tap do |factory_with_traits|
         factory_with_traits.append_traits traits
       end
     end
@@ -173,6 +174,7 @@ module FactoryBot
       @hierarchy_class = nil
       @hierarchy_instance = nil
       @compiled = false
+      @with_traits_cache = nil
     end
   end
 end

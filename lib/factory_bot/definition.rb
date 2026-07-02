@@ -176,11 +176,15 @@ module FactoryBot
     def aggregate_from_traits_and_self(method_name)
       compile
 
-      [
-        base_traits.map(&method_name),
-        yield,
-        additional_traits.map(&method_name)
-      ].flatten.compact
+      if @base_traits.empty? && @additional_traits.empty?
+        [yield].flatten.compact
+      else
+        [
+          base_traits.map(&method_name),
+          yield,
+          additional_traits.map(&method_name)
+        ].flatten.compact
+      end
     end
 
     def expand_enum_traits(klass)

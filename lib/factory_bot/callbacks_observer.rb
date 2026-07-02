@@ -1,8 +1,11 @@
 module FactoryBot
   # @api private
   class CallbacksObserver
+    EMPTY_CALLBACKS = [].freeze
+    private_constant :EMPTY_CALLBACKS
+
     def initialize(callbacks, evaluator)
-      @callbacks = callbacks
+      @callbacks_by_name = callbacks.group_by(&:name)
       @evaluator = evaluator
       @completed = []
     end
@@ -19,7 +22,7 @@ module FactoryBot
     private
 
     def callbacks_by_name(name)
-      @callbacks.select { |callback| callback.name == name }
+      @callbacks_by_name.fetch(name, EMPTY_CALLBACKS)
     end
 
     def completed?(instance, callback)

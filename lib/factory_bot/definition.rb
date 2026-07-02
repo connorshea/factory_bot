@@ -173,12 +173,12 @@ module FactoryBot
       @defined_traits_by_name = nil
     end
 
-    def aggregate_from_traits_and_self(method_name, &block)
+    def aggregate_from_traits_and_self(method_name)
       compile
 
       [
         base_traits.map(&method_name),
-        instance_exec(&block),
+        yield,
         additional_traits.map(&method_name)
       ].flatten.compact
     end

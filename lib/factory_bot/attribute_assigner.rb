@@ -95,7 +95,7 @@ module FactoryBot
     end
 
     def override_names
-      @evaluator.__override_names__
+      @override_names ||= @evaluator.__override_names__
     end
 
     def attribute_names

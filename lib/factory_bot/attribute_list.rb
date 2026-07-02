@@ -20,19 +20,19 @@ module FactoryBot
     end
 
     def names
-      map(&:name)
+      @names ||= map(&:name)
     end
 
     def associations
-      AttributeList.new(@name, select(&:association?))
+      @associations ||= AttributeList.new(@name, select(&:association?))
     end
 
     def ignored
-      AttributeList.new(@name, select(&:ignored))
+      @ignored ||= AttributeList.new(@name, select(&:ignored))
     end
 
     def non_ignored
-      AttributeList.new(@name, reject(&:ignored))
+      @non_ignored ||= AttributeList.new(@name, reject(&:ignored))
     end
 
     def apply_attributes(attributes_to_apply)
@@ -42,6 +42,7 @@ module FactoryBot
     private
 
     def add_attribute(attribute)
+      @names = @associations = @ignored = @non_ignored = nil
       @attributes << attribute
       attribute
     end
